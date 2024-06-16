@@ -19,7 +19,7 @@ const jwtVerify = async (req ,res, next) => {
         req.user = user
         next()
     } catch (error) {
-        return res.status(401).json(new ApiError(401, error.message || "invalid access token"))
+        return res.status(401).json(new ApiError(401,"invalid access token"))
     }
 }
 const IsAdmin = async (req ,res, next) => {
@@ -34,7 +34,7 @@ const IsAdmin = async (req ,res, next) => {
         }
         next()
     } catch (error) {
-        return res.status(401).json(new ApiError(401, error.message || "something went wrong"))
+        return res.status(401).json(new ApiError(401,"something went wrong"))
     }
 }
 export {

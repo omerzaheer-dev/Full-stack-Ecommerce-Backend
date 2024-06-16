@@ -195,6 +195,28 @@ const updateProduct = asyncHandler(async (req, res) => {
        .json(new ApiResponse(200, { newProduct }, "Product updated successfully"));
 });
 
+const getCategoryProduct = asyncHandler( async (req , res) => {
+    const productCategory = await Product.distinct("category")
+    const products = [];
+    for (const category of productCategory) {
+      const product = await Product.findOne({ category });
+      if (product) {
+        products.push(product);
+      }
+    }
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            {
+                products
+            },
+            "Product categories with one product fetched successfuly"
+        )
+    )
+} )
+
 const imageTobeDel = asyncHandler( async (req , res) => {
             const url = "https://res.cloudinary.com/dur5vi2mv/image/upload/v1716492052/product/ikzieubbanxdlbogqspw.webp";
             console.log("url",url)
@@ -219,5 +241,6 @@ export {
     uploadProducts,
     getAllProducts,
     updateProduct,
-    imageTobeDel
+    getCategoryProduct,
+    imageTobeDel,
 }
