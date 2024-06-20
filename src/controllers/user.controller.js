@@ -67,11 +67,22 @@ const loginUser = asyncHandler( async (req , res) => {
             new ApiError(401, "Invalid credentials")
         )
     }
-    const token = user.generateAcessToken();
+    const cookies = req.cookies;
+    const Accesstoken = user.generateAcessToken();
+    const newRefreshtoken = user.generateRefreshToken();
     const options = {
         httpOnly:true,
-        secure:true
+        secure:true,
+        sameSite: 'None'
     }
+    let newRefreshTokenArray = !cookies?.Refreshtoken  ? user.refreshToken : user.refreshToken.filter(rt => rt !== cookies.Refreshtoken);
+
+    if (cookies?.Refreshtoken) {
+        res.clearCookie('Refreshtoken', { httpOnly: true, sameSite: 'None', secure: true });
+    }
+    user.refreshToken = [...newRefreshTokenArray, newRefreshtoken];
+    const result = await user.save({ validateBeforeSave: false });
+
     const usernow = await User.findById(user._id).select("-password")
     if(!usernow){
         return res.status(401).json(
@@ -79,12 +90,13 @@ const loginUser = asyncHandler( async (req , res) => {
         )
     }
     return res.status(200)
-    .cookie("token",token,options)
+    .cookie("Accesstoken",Accesstoken,options)
+    .cookie("Refreshtoken",newRefreshtoken,options)
     .json(
         new ApiResponse(
             200,
             {
-                user:usernow,token
+                user:usernow
             },
             "User logged in successfully"
         )
@@ -108,12 +120,34 @@ const userDetails = asyncHandler( async (req , res) => {
 } )
 
 const logoutUser = asyncHandler( async (req , res) => {
+    const cookies = req.cookies;
+    if (!cookies?.Refreshtoken){
+        return res.status(401)
+        .json(
+            new ApiError(401,"refreshToken not present")
+        )
+    }
+    const refreshToken = cookies?.Refreshtoken;
+    const foundUser = await User.findOne({ refreshToken }).exec();
+    if (!foundUser) {
+        res.clearCookie('Refreshtoken', { httpOnly: true, sameSite: 'None', secure: true });
+        res.clearCookie('Accesstoken', { httpOnly: true, sameSite: 'None', secure: true });
+        return res.status(401)
+        .json(
+            new ApiError(401,"user not found")
+        )
+    }
+    foundUser.refreshToken = foundUser.refreshToken.filter(rt => rt !== refreshToken);;
+    const result = await foundUser.save({ validateBeforeSave: false });
     const options = {
         httpOnly : true,
         secure : true
     }
-    return res.status(200)
-    .clearCookie("token",options)
+    res
+    .clearCookie("Accesstoken",options)
+    .clearCookie("Refreshtoken",options)
+    return res
+    .status(200)
     .json(
         new ApiResponse(200,{},"user logged out successfully")
     )

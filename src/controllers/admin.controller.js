@@ -8,9 +8,9 @@ const allUsers = asyncHandler( async ( req , res ) => {
     const Users = await User.find()
     if( !Users ){
         return res
-        .status(401)
+        .status(400)
         .json(
-            new ApiError(401,"no user found")
+            new ApiError(400,"no user found")
         )
     }
     return res

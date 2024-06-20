@@ -22,7 +22,8 @@ const userSchema = new mongoose.Schema({
     profilePicture:{
         type: String,
         default: ""
-    }
+    },
+    refreshToken:[String]
     
 },{
     timestamps:true
@@ -48,7 +49,19 @@ userSchema.methods.generateAcessToken = function (){
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
-            expiresIn: 60*60*8
+            expiresIn: 10
+        }
+    )
+}
+userSchema.methods.generateRefreshToken = function (){
+    return Jwt.sign(
+        {
+            _id: this.id,
+            email: this.email,
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: 60
         }
     )
 }
