@@ -160,4 +160,4 @@ const delusr = asyncHandler(async (req , res) => {
     )
 })
 
-export {registerUser,loginUser,userDetails,delusr,logoutUser}
+export {registerUser,loginUser,userDetails,delusr,logoutUser,}

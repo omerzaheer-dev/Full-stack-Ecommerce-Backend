@@ -23,12 +23,14 @@ app.use(cookieParser())
 import userRouter from './routes/user.routes.js'
 import adminRouter from "./routes/admin.routes.js"
 import productRoutes from "./routes/product.routes.js"
-
+import parsingRoute from "./routes/apple.routes.js"
 //routes decelaration
 
 app.use("/api/v1/users" , userRouter);
 app.use("/api/v1/admin" , adminRouter);
 app.use("/api/v1/product" , productRoutes);
+
+app.use("/api/v1/p" , parsingRoute);
 
 
 export { app }

@@ -91,7 +91,6 @@ const uploadProducts = asyncHandler( async ( req , res ) => {
             )
         )
 } )
-
 const getAllProducts = asyncHandler( async ( req , res ) => {
     const products = await Product.find().sort({ createdAt : -1 })
     if( !products ){
@@ -109,7 +108,6 @@ const getAllProducts = asyncHandler( async ( req , res ) => {
         )
     )
 } )
-
 const updateProduct = asyncHandler(async (req, res) => {
     const { productName, orignalProductName, price, description, brand, category, sellingPrice, removePreviousImagesUrl } = req.body;
 
@@ -194,7 +192,6 @@ const updateProduct = asyncHandler(async (req, res) => {
        .status(200)
        .json(new ApiResponse(200, { newProduct }, "Product updated successfully"));
 });
-
 const getCategoryProduct = asyncHandler( async (req , res) => {
     const productCategory = await Product.distinct("category")
     const products = [];
@@ -217,30 +214,45 @@ const getCategoryProduct = asyncHandler( async (req , res) => {
     )
 } )
 
-const imageTobeDel = asyncHandler( async (req , res) => {
-            const url = "https://res.cloudinary.com/dur5vi2mv/image/upload/v1716492052/product/ikzieubbanxdlbogqspw.webp";
-            console.log("url",url)
-            const urlArray = url.split('/');
-            console.log("split result",urlArray)
-            const publicId = `${urlArray[urlArray.length - 2]}/${urlArray[urlArray.length - 1].split(".")[0]}`;
-            console.log("publicId", publicId);
-            const deleteCloudinary = await deleteImageByPublicId(publicId);
-            return res
-            .status(200)
-            .json(
-                new ApiResponse(
-                    200,
-                    {
-                        deleteCloudinary
-                    },
-                    "Product updated successfully"
-                )
-            )
-} )
+// const imageTobeDel = asyncHandler( async (req , res) => {
+//             const url = "https://res.cloudinary.com/dur5vi2mv/image/upload/v1716492052/product/ikzieubbanxdlbogqspw.webp";
+//             console.log("url",url)
+//             const urlArray = url.split('/');
+//             console.log("split result",urlArray)
+//             const publicId = `${urlArray[urlArray.length - 2]}/${urlArray[urlArray.length - 1].split(".")[0]}`;
+//             console.log("publicId", publicId);
+//             const deleteCloudinary = await deleteImageByPublicId(publicId);
+//             return res
+//             .status(200)
+//             .json(
+//                 new ApiResponse(
+//                     200,
+//                     {
+//                         deleteCloudinary
+//                     },
+//                     "Product updated successfully"
+//                 )
+//             )
+// } )
+const getOneCategoryProduct = asyncHandler(async (req,res) => {
+    const {category} = req.body
+    const Products = await Product.find({category})
+    if(!Product){
+        return res.status(402).json(
+            new ApiError(402, "No product with this category found")
+        )
+    }
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,Products,"message")
+    )
+})
 export {
     uploadProducts,
     getAllProducts,
     updateProduct,
     getCategoryProduct,
-    imageTobeDel,
+    // imageTobeDel,
+    getOneCategoryProduct,
 }
