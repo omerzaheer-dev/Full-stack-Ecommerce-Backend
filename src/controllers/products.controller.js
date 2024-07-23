@@ -237,7 +237,7 @@ const getCategoryProduct = asyncHandler( async (req , res) => {
 const getOneCategoryProduct = asyncHandler(async (req,res) => {
     const {category} = req.body
     const Products = await Product.find({category})
-    if(!Product){
+    if(!Products){
         return res.status(402).json(
             new ApiError(402, "No product with this category found")
         )
@@ -248,6 +248,20 @@ const getOneCategoryProduct = asyncHandler(async (req,res) => {
         new ApiResponse(200,Products,"message")
     )
 })
+const getProductDetail = asyncHandler(async (req,res) => {
+    const {id} = req.body
+    const product = await Product.findById(id)
+    if(!product){
+        return res.status(402).json(
+            new ApiError(402, "No product with this category found")
+        )
+    }
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,product,"message")
+    )
+})
 export {
     uploadProducts,
     getAllProducts,
@@ -255,4 +269,5 @@ export {
     getCategoryProduct,
     // imageTobeDel,
     getOneCategoryProduct,
+    getProductDetail
 }
