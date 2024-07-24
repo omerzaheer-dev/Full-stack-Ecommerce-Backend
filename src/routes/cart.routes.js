@@ -4,5 +4,5 @@ import { addToCartProduct , productsInCart } from "../controllers/cart.controlle
 
 const router = Router()
 router.route("/add-toCart").post(jwtVerify,addToCartProduct)
-router.route("/cart").get(jwtVerify,productsInCart)
+router.route("/get-cart-products").get(jwtVerify,productsInCart)
 export default router
