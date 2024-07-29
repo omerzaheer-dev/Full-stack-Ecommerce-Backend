@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { jwtVerify , IsAdmin  } from "../middlewares/auth.middleware.js"
-import { uploadProducts , getAllProducts , updateProduct , getCategoryProduct , getOneCategoryProduct , getProductDetail  } from "../controllers/products.controller.js" 
+import { uploadProducts , getAllProducts , updateProduct , getCategoryProduct , getOneCategoryProduct , getProductDetail , searchProducts  } from "../controllers/products.controller.js" 
 import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router()
@@ -12,5 +12,6 @@ router.route("/update-Products").patch(jwtVerify,IsAdmin,upload.array('productIm
 router.route("/get-categoryProduct").get(getCategoryProduct)
 router.route("/get-one-categoryProduct").post(getOneCategoryProduct)
 router.route("/get-productDetails").post(getProductDetail)
+router.route("/search-products").get(searchProducts)
 
 export default router

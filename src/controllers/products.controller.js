@@ -262,6 +262,45 @@ const getProductDetail = asyncHandler(async (req,res) => {
         new ApiResponse(200,product,"message")
     )
 })
+const searchProducts = asyncHandler(async (req,res) => {
+    const { q } = req.query
+    const page = parseInt(req.query.page, 10) || 1;
+    const pageSize = parseInt(req.query.pageSize, 10) || 10;
+    const skip = (page - 1) * pageSize;
+    const regex = new RegExp(q,"i","g")
+    const products = await Product.find({
+        $or: [
+            { productName: regex },
+            { brand: regex },
+            { category: regex }
+        ]
+    }).skip(skip)
+    .limit(pageSize)
+    .sort({ createdAt: -1 });
+
+    const totalProducts = await Product.countDocuments({
+        $or: [
+            { productName: regex },
+            { brand: regex },
+            { category: regex }
+        ]
+    })
+    const totalPages = Math.ceil(totalProducts / pageSize);
+    const hasMore = page === totalPages ? false : true
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,{
+            products,
+            totalProducts,
+            totalPages,
+            currentPage: page,
+            hasMore
+        },"returnded data")
+    )
+})
+
 export {
     uploadProducts,
     getAllProducts,
@@ -269,5 +308,6 @@ export {
     getCategoryProduct,
     // imageTobeDel,
     getOneCategoryProduct,
-    getProductDetail
+    getProductDetail,
+    searchProducts
 }
