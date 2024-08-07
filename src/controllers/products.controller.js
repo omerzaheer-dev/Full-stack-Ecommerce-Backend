@@ -301,6 +301,49 @@ const searchProducts = asyncHandler(async (req,res) => {
     )
 })
 
+const filterProducts = asyncHandler(async (req,res) => {
+    const { categoryList , page , pageSize ,sort } = req?.body
+    const skip = (page - 1) * pageSize;
+    console.log("a",sort)
+    let products;
+    if(sort==='asc'){
+        products = await Product.find({
+            category: { $in: categoryList }
+        }).sort({ sellingPrice: 1 })
+        .skip(skip)
+        .limit(pageSize)
+        .sort({ createdAt: -1 });
+    }
+    else if(sort==='dsc'){
+        products = await Product.find({
+            category: { $in: categoryList }
+        }).sort({ sellingPrice: -1 })
+        .skip(skip)
+        .limit(pageSize)
+        .sort({ createdAt: -1 });
+    }else{
+        products = await Product.find({
+            category: { $in: categoryList }
+        }).skip(skip)
+        .limit(pageSize)
+        .sort({ createdAt: -1 });
+    }
+    const totalProducts = await Product.countDocuments({
+        category: { $in: categoryList }
+    })
+    const totalPages = Math.ceil(totalProducts / pageSize);
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,{
+            products,
+            currentPage:page,
+            totalPages,
+            totalProducts
+        },"returnded data")
+    )
+})
+
 export {
     uploadProducts,
     getAllProducts,
@@ -309,5 +352,6 @@ export {
     // imageTobeDel,
     getOneCategoryProduct,
     getProductDetail,
-    searchProducts
+    searchProducts,
+    filterProducts
 }
