@@ -7,3 +7,8 @@ API_KEY=cloudinary apikey
 API_SECRET=cloudinary api secret
 STRIPE_SECRET_KEY=stripe key
 END_POINT_SECRET=endpoint from docs of stripe
+
+
+
+
+node version is v18.17.1.
