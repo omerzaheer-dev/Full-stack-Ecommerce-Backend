@@ -5,7 +5,6 @@ import cookieParser from "cookie-parser";
 const app = express()
 app.use(cors({
     origin: process.env.CORS_ORIGIN ,
-    // origin: "http://192.168.1.23:3000" ,
     credentials: true
 }))
 //for origins we use cors
@@ -24,6 +23,7 @@ import userRouter from './routes/user.routes.js'
 import adminRouter from "./routes/admin.routes.js"
 import productRoutes from "./routes/product.routes.js"
 import cartRoutes from "./routes/cart.routes.js"
+import paymentRoutes from "./routes/payment.routes.js"
 
 //routes decelaration
 
@@ -31,6 +31,7 @@ app.use("/api/v1/users" , userRouter);
 app.use("/api/v1/admin" , adminRouter);
 app.use("/api/v1/product" , productRoutes);
 app.use("/api/v1/cart" , cartRoutes);
+app.use("/api/v1/payment" , paymentRoutes);
 
 // app.use("/api/v1/p" , parsingRoute);
 

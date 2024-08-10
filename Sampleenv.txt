@@ -1,0 +1,9 @@
+MONGODB_URI=mongodb uri
+PORT=your port
+CORS_ORIGIN=frontend url
+ACCESS_TOKEN_SECRET=ses
+REFRESH_TOKEN_SECRET=hgyf
+API_KEY=cloudinary apikey
+API_SECRET=cloudinary api secret
+STRIPE_SECRET_KEY=stripe key
+END_POINT_SECRET=endpoint from docs of stripe

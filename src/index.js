@@ -5,7 +5,7 @@ dotenv.config({
 
 import { app } from './app.js';
 import connectDB from "./db/index.js";
-import { DB_NAME } from "./constants.js";
+// import { DB_NAME } from "./constants.js";
 
 connectDB()
 .then(() => {

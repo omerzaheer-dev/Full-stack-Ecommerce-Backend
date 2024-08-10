@@ -304,7 +304,6 @@ const searchProducts = asyncHandler(async (req,res) => {
 const filterProducts = asyncHandler(async (req,res) => {
     const { categoryList , page , pageSize ,sort } = req?.body
     const skip = (page - 1) * pageSize;
-    console.log("a",sort)
     let products;
     if(sort==='asc'){
         products = await Product.find({
