@@ -118,6 +118,7 @@ const webHook = asyncHandler(async (req,res) => {
                 new ApiError(402, "something went wrong while creating new order")
             )
         }
+        await Cart.deleteMany({userId:session.metadata.userId})
         break;
         default:
             console.log(`Unhandled event type ${event.type}`);
