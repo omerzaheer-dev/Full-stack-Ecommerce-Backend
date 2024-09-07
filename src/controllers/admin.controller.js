@@ -3,6 +3,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js" 
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
+import { OrderProduct } from "../models/orderProduct.model.js";
 
 const allUsers = asyncHandler( async ( req , res ) => {
     const Users = await User.find()
@@ -75,7 +76,31 @@ const updateUserRole = asyncHandler( async ( req , res ) => {
             )
         )
 } )
+
+const allOrders = asyncHandler( async ( req , res ) => {
+    try {
+        const orderList = await OrderProduct.find().sort({createdAt:-1})
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    {
+                        orderList
+                    },
+                    "all users fetched"
+                )
+            )
+    } catch (error) {
+        return res
+        .status(406)
+        .json(
+            new ApiError(406,"Something went wrong")
+        )
+    }
+} )
 export {
     allUsers,
-    updateUserRole
+    updateUserRole,
+    allOrders
 }
