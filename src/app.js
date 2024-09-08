@@ -35,6 +35,9 @@ app.use("/api/v1/cart" , cartRoutes);
 app.use("/api/v1/payment" , paymentRoutes);
 
 // app.use("/api/v1/p" , parsingRoute);
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+  });
 
 
 export { app }
