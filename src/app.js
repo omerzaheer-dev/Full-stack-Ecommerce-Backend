@@ -3,10 +3,10 @@ import cors from "cors"
 import cookieParser from "cookie-parser";
 
 const app = express()
-app.options('*', cors({
-    origin: process.env.CORS_ORIGIN,
+app.use(cors({
+    origin: '*',
     credentials: true
-}));
+}))
 //for origins we use cors
 app.use(express.json({limit: "16kb"}))
 //we not accept unlimited json response due to unliited responses server crashes we use limit
